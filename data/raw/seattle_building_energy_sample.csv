@@ -1,0 +1,4 @@
+building_id,building_name,region,date,energy_consumption_kwh,energy_cost_usd,building_area_sqft,avg_daily_temp
+1,Alpha Tower,North,2024-01-01,1200,300,10000,45
+2,Beta Complex,South,2024-01-01,1500,400,12000,50
+3,Gamma Plaza,East,2024-01-01,1300,350,11000,48

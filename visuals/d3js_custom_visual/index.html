@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Energy Cost Anomalies Visualization</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f9fc;
+      text-align: center;
+      padding-top: 40px;
+    }
+    .tooltip {
+      position: absolute;
+      text-align: center;
+      padding: 8px;
+      font-size: 14px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      pointer-events: none;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🏢 Energy Cost Anomalies - Building Level</h2>
+<div id="viz"></div>
+
+<script>
+// Sample Data
+var data = [
+  { building: "Alpha Tower", cost: 120 },
+  { building: "Beta Complex", cost: 180 },
+  { building: "Gamma Plaza", cost: 100 },
+  { building: "Delta Center", cost: 220 },
+  { building: "Omega Heights", cost: 160 }
+];
+
+// SVG setup
+var svgWidth = 700, svgHeight = 300;
+var svg = d3.select("#viz")
+    .append("svg")
+    .attr("width", svgWidth)
+    .attr("height", svgHeight);
+
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip");
+
+// Create circles
+var circles = svg.selectAll("circle")
+  .data(data)
+  .enter()
+  .append("circle")
+    .attr("cx", (d, i) => i * 140 + 70)
+    .attr("cy", svgHeight / 2)
+    .attr("r", 0) // Start with 0 radius for animation
+    .style("fill", d => d.cost > 150 ? "#e74c3c" : "#3498db")
+    .on("mouseover", function(event, d) {
+      tooltip.transition().duration(200).style("opacity", .9);
+      tooltip.html(`<strong>${d.building}</strong><br/>Energy Cost: $${d.cost}`)
+        .style("left", (event.pageX - 40) + "px")
+        .style("top", (event.pageY - 70) + "px");
+    })
+    .on("mouseout", function() {
+      tooltip.transition().duration(500).style("opacity", 0);
+    });
+
+// Animate circles
+circles.transition()
+    .duration(1500)
+    .ease(d3.easeBounce)
+    .attr("r", d => d.cost / 5);
+
+// Add building labels
+svg.selectAll("text")
+  .data(data)
+  .enter()
+  .append("text")
+    .attr("x", (d, i) => i * 140 + 70)
+    .attr("y", svgHeight / 2 + 80)
+    .attr("text-anchor", "middle")
+    .text(d => d.building)
+    .style("font-size", "12px")
+    .style("fill", "#333");
+
+</script>
+
+</body>
+</html>
